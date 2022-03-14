@@ -9,7 +9,6 @@ class NewsRepository(val newsApiService: NewsApiService) {
 
     suspend fun getNews(apiKey:String) : Flow<NewsApiResult>{
         return flow {
-            kotlinx.coroutines.delay(3000L)
             val result = newsApiService.getHeadlines(apiKey)
             emit(result)
         }
