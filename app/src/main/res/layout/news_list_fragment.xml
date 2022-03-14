@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        
         <variable
             name="viewModel"
-            type="com.demo.dailynews.ui.news.newslist.viewmodel.NewsListViewModel" />
-
+            type="com.demo.dailynews.ui.news.viewmodel.NewsListViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.news.newslist.NewsListFragment">
+        tools:context=".ui.news.view.NewsListFragment">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/articlesRecyclerView"
             android:layout_width="0dp"
@@ -21,7 +19,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/errorTextView"
             android:layout_width="wrap_content"
@@ -31,7 +28,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <ProgressBar
             android:id="@+id/loadingBar"
             style="?android:attr/progressBarStyle"

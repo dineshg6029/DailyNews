@@ -3,8 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
 
+    </data>
     <androidx.cardview.widget.CardView
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/five_dp"
@@ -32,6 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/five_dp"
                 android:gravity="start|top"
+                style="@style/headline_style"
                 app:layout_constraintBottom_toTopOf="@+id/date_textView"
                 app:layout_constraintEnd_toStartOf="@+id/news_imageView"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/five_dp"
+                android:textSize="@dimen/small_text_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/news_imageView"
                 app:layout_constraintStart_toStartOf="parent" />

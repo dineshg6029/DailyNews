@@ -3,17 +3,17 @@ package com.demo.dailynews.ui.news.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.demo.dailynews.R
+import com.demo.dailynews.common.updateDateTime
 import com.demo.dailynews.data.model.Article
 import com.demo.dailynews.databinding.NewsItemViewBinding
+import com.demo.dailynews.ui.news.interfaces.CustomItemClickListener
 
-class ArticlesListAdapter : RecyclerView.Adapter<ArticlesListAdapter.ArticleViewHolder>(){
+class ArticlesListAdapter(val customItemClickListener: CustomItemClickListener) : RecyclerView.Adapter<ArticlesListAdapter.ArticleViewHolder>(){
 
-    private var articles = mutableListOf<Article>()
-
+    private var articles:MutableList<Article> = mutableListOf<Article>()
 
     fun update( updatedArticles : List<Article>){
         articles.clear()
@@ -32,16 +32,29 @@ class ArticlesListAdapter : RecyclerView.Adapter<ArticlesListAdapter.ArticleView
 
     override fun getItemCount() = articles.size
 
-    class ArticleViewHolder(val binding: NewsItemViewBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ArticleViewHolder(val binding: NewsItemViewBinding) : RecyclerView.ViewHolder(binding.root),View.OnClickListener{
+
+        init {
+            binding.rootView.setOnClickListener(this)
+        }
+
         fun onBind(article : Article){
             article?.let {
                 binding.titleTextView.text = it.newsHeadline
-                binding.dateTextView.text = it.newsDateTime
+                binding.dateTextView.text = updateDateTime(it.newsDateTime)
                 Glide.with(binding.root.context)
                     .load(it.newsImageUrl)
-                    .placeholder(android.R.drawable.progress_horizontal)
+                    .placeholder(R.mipmap.ic_launcher_round)
                     .error(android.R.drawable.stat_notify_error)
                     .into(binding.newsImageView)
+            }
+        }
+
+        override fun onClick(view: View?) {
+            when(view?.id){
+                R.id.rootView -> {
+                    customItemClickListener.itemClick(adapterPosition)
+                }
             }
         }
     }

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.demo.dailynews">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DailyNews">
         <activity
-            android:name=".ui.news.MainActivity"
-            android:exported="true">
+            android:name=".ui.news.view.HostActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DailyNews.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
