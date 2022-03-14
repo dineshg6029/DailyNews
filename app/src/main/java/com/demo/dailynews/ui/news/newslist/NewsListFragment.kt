@@ -74,7 +74,7 @@ class NewsListFragment : Fragment(),CustomItemClickListener {
         })
 
         viewModel.articleList.observe(this, {
-            if(it.isNullOrEmpty()){
+            if(!it.isNullOrEmpty()){
                 dataBindingObject.articlesRecyclerView.visibility = View.VISIBLE
                 articles = it?.toMutableList()
                 articlesListAdapter.update(it)
