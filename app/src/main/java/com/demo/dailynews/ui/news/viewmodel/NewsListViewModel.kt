@@ -1,21 +1,21 @@
 package com.demo.dailynews.ui.news.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.demo.dailynews.BuildConfig
 import com.demo.dailynews.R
 import com.demo.dailynews.data.model.Article
 import com.demo.dailynews.data.repository.NewsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-
-class NewsListViewModel(
+import javax.inject.Inject
+@HiltViewModel
+class NewsListViewModel @Inject constructor(
+    private val newsRepository: NewsRepository,
     private val app: Application,
-    private val newsRepository: NewsRepository
+    private val savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
 
     private val _articleList = MutableLiveData<List<Article>>()

@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.demo.dailynews.R
 import com.demo.dailynews.databinding.NewsDescriptionFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ArticleDescription : Fragment() {
     private val arguments by navArgs<ArticleDescriptionArgs>()
     private lateinit var binding: NewsDescriptionFragmentBinding

@@ -10,19 +10,29 @@ import com.demo.dailynews.common.updateDateTime
 import com.demo.dailynews.data.model.Article
 import com.demo.dailynews.databinding.NewsItemViewBinding
 import com.demo.dailynews.ui.news.interfaces.CustomItemClickListener
+import javax.inject.Inject
 
-class ArticlesListAdapter(val customItemClickListener: CustomItemClickListener) : RecyclerView.Adapter<ArticlesListAdapter.ArticleViewHolder>(){
 
-    private var articles:MutableList<Article> = mutableListOf<Article>()
+class ArticlesListAdapter @Inject constructor() :
+    RecyclerView.Adapter<ArticlesListAdapter.ArticleViewHolder>() {
 
-    fun update( updatedArticles : List<Article>){
+    private var articles:MutableList<Article> = mutableListOf()
+    var customItemClickListener: CustomItemClickListener ?= null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+
+    fun update(updatedArticles: List<Article>) {
         articles.clear()
         articles.addAll(updatedArticles)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-        val binding = NewsItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            NewsItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ArticleViewHolder(binding)
     }
 
@@ -32,13 +42,14 @@ class ArticlesListAdapter(val customItemClickListener: CustomItemClickListener) 
 
     override fun getItemCount() = articles.size
 
-    inner class ArticleViewHolder(val binding: NewsItemViewBinding) : RecyclerView.ViewHolder(binding.root),View.OnClickListener{
+    inner class ArticleViewHolder(val binding: NewsItemViewBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
             binding.rootView.setOnClickListener(this)
         }
 
-        fun onBind(article : Article){
+        fun onBind(article: Article) {
             article?.let {
                 binding.titleTextView.text = it.newsHeadline
                 binding.dateTextView.text = updateDateTime(it.newsDateTime)
@@ -51,9 +62,9 @@ class ArticlesListAdapter(val customItemClickListener: CustomItemClickListener) 
         }
 
         override fun onClick(view: View?) {
-            when(view?.id){
+            when (view?.id) {
                 R.id.rootView -> {
-                    customItemClickListener.itemClick(adapterPosition)
+                    customItemClickListener?.itemClick(adapterPosition)
                 }
             }
         }
