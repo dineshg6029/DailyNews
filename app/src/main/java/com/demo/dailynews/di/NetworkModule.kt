@@ -18,7 +18,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesOkHttpClient():OkHttpClient{
-        var httpLoggingInterceptor: HttpLoggingInterceptor =
+        val httpLoggingInterceptor: HttpLoggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)

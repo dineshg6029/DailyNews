@@ -16,12 +16,8 @@ import javax.inject.Inject
 class ArticlesListAdapter @Inject constructor() :
     RecyclerView.Adapter<ArticlesListAdapter.ArticleViewHolder>() {
 
-    private var articles:MutableList<Article> = mutableListOf()
+    private var articles: MutableList<Article> = mutableListOf()
     var customItemClickListener: CustomItemClickListener ?= null
-        get() = field
-        set(value) {
-            field = value
-        }
 
 
     fun update(updatedArticles: List<Article>) {
@@ -42,7 +38,7 @@ class ArticlesListAdapter @Inject constructor() :
 
     override fun getItemCount() = articles.size
 
-    inner class ArticleViewHolder(val binding: NewsItemViewBinding) :
+    inner class ArticleViewHolder(private val binding: NewsItemViewBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
@@ -50,7 +46,7 @@ class ArticlesListAdapter @Inject constructor() :
         }
 
         fun onBind(article: Article) {
-            article?.let {
+            article.let {
                 binding.titleTextView.text = it.newsHeadline
                 binding.dateTextView.text = updateDateTime(it.newsDateTime)
                 Glide.with(binding.root.context)

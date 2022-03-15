@@ -30,7 +30,7 @@ class NewsListFragment : Fragment(), CustomItemClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dataBindingObject =
             DataBindingUtil.inflate(inflater, R.layout.news_list_fragment, container, false)
         return dataBindingObject.root
@@ -38,16 +38,13 @@ class NewsListFragment : Fragment(), CustomItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        savedInstanceState?.let {
-            Toast.makeText(activity,"Saved Instance state is not null",Toast.LENGTH_SHORT).show()
-        }
         observeLiveData()
         loadRecyclerView()
     }
 
     override fun onResume() {
         super.onResume()
-        if(viewModel.articleList.value == null){
+        if (viewModel.articleList.value == null) {
             viewModel.getNewsArticles()
         }
         viewModel.articleList.value?.let {
@@ -73,15 +70,18 @@ class NewsListFragment : Fragment(), CustomItemClickListener {
             }
         })
 
-        viewModel.errorMessage.observe(this, {
-            dataBindingObject.errorTextView.visibility = View.VISIBLE
-            dataBindingObject.errorTextView.text = it
-        })
+        viewModel.errorMessage.observe(
+            this,
+            {
+                dataBindingObject.errorTextView.visibility = View.VISIBLE
+                dataBindingObject.errorTextView.text = it
+            },
+        )
 
         viewModel.articleList.observe(this, {
             if (!it.isNullOrEmpty()) {
                 dataBindingObject.articlesRecyclerView.visibility = View.VISIBLE
-                articles = it?.toMutableList()
+                articles = it.toMutableList()
                 articlesListAdapter.update(it)
             } else {
                 dataBindingObject.errorTextView.visibility = View.VISIBLE

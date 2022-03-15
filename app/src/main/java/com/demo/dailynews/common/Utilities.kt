@@ -15,7 +15,7 @@ fun loadImageUrl(imageView: ImageView,imageUrl:String){
 }
 
 fun updateDateTime(dateTime:String):String{
-    var list = dateTime.split("T")
-    var timeList = list[1].split(".")
+    val list: List<String> = dateTime.split("T")
+    val timeList = list[1].split(".")
     return "${list[0]} ${timeList[0]}"
 }

@@ -11,11 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
-    private val app: Application,
-    private val savedStateHandle: SavedStateHandle
+    private val app: Application
 ) : AndroidViewModel(app) {
 
     private val _articleList = MutableLiveData<List<Article>>()
@@ -31,10 +31,8 @@ class NewsListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             loadingStatus.postValue(true)
             newsRepository.getNews(BuildConfig.NEWS_KEY).collect {
-                it?.let {
-                    if (!it.status.isNullOrBlank() &&
-                        it.status == app.getString(R.string.fetch_success_status)
-                    ) {
+                it.let {
+                    if (it.status == app.getString(R.string.fetch_success_status)) {
                         _articleList.postValue(it.articles)
                     } else {
                         errorMessage.postValue(app.getString(R.string.fetch_failed_message))
