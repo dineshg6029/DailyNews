@@ -11,28 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.news.view.NewsListFragment">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/articlesRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/articlesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
         <TextView
             android:id="@+id/errorTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewModel.errorMessage}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <ProgressBar
-            android:id="@+id/loadingBar"
-            style="@android:style/Widget.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:padding="@dimen/five_dp"
+            android:gravity="center_vertical|center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
