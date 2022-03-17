@@ -10,7 +10,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.news.view.NewsListFragment">
+        tools:context=".ui.news.view.NewsListFragment"
+        android:id="@+id/news_list_root">
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="0dp"
@@ -29,7 +31,6 @@
             android:id="@+id/errorTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.errorMessage}"
             android:padding="@dimen/five_dp"
             android:gravity="center_vertical|center"
             app:layout_constraintBottom_toBottomOf="parent"

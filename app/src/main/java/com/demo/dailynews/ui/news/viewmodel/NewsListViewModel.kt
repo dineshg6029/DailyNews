@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.demo.dailynews.BuildConfig
 import com.demo.dailynews.R
+import com.demo.dailynews.common.wrapEspressoIdlingResource
 import com.demo.dailynews.data.model.Article
 import com.demo.dailynews.data.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,14 +31,16 @@ class NewsListViewModel @Inject constructor(
     fun getNewsArticles() {
         viewModelScope.launch(Dispatchers.IO) {
             loadingStatus.postValue(true)
-            newsRepository.getNews(BuildConfig.NEWS_KEY).collect {
-                it.let {
-                    if (it.status == app.getString(R.string.fetch_success_status)) {
-                        _articleList.postValue(it.articles)
-                    } else {
-                        errorMessage.postValue(app.getString(R.string.fetch_failed_message))
+            wrapEspressoIdlingResource {
+                newsRepository.getNews(BuildConfig.NEWS_KEY).collect {
+                    it.let {
+                        if (it.status == app.getString(R.string.fetch_success_status)) {
+                            _articleList.postValue(it.articles)
+                        } else {
+                            errorMessage.postValue(app.getString(R.string.fetch_failed_message))
+                        }
+                        loadingStatus.postValue(false)
                     }
-                    loadingStatus.postValue(false)
                 }
             }
         }
