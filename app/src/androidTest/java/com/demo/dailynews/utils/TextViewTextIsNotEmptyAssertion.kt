@@ -11,6 +11,6 @@ class TextViewTextIsNotEmptyAssertion :ViewAssertion {
             throw noViewFoundException
         }
         val textView = view as TextView
-        assert(!textView!!.text.isNullOrBlank())
+        assert(!textView.text.isNullOrBlank())
     }
 }
