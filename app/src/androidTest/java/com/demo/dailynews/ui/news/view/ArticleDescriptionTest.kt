@@ -4,9 +4,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +15,7 @@ import com.demo.dailynews.utils.SHORT_TIME_SLEEP
 import com.demo.dailynews.utils.TextViewTextIsNotEmptyAssertion
 import com.java.predictweather.data.retrofit.NetworkUtils
 import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -56,9 +55,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.news_description_root))
                 .check(matches(isDisplayed()))
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -75,9 +74,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.title_textView))
                 .check(matches(isDisplayed()))
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -96,9 +95,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.description_TextView))
                 .check(matches(isDisplayed()))
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -117,9 +116,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.date_TextView))
                 .check(matches(isDisplayed()))
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -141,9 +140,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.title_textView))
                 .check(TextViewTextIsNotEmptyAssertion())
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -164,9 +163,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.description_TextView))
                 .check(TextViewTextIsNotEmptyAssertion())
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -187,9 +186,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.date_TextView))
                 .check(TextViewTextIsNotEmptyAssertion())
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
@@ -209,15 +208,15 @@ class ArticleDescriptionTest{
             onView(withId(R.id.shareNewsURL))
                 .check(matches(isDisplayed()))
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }
 
     @Test
-    fun test_ShareNewsUrlActionInArticleDescriptionFragment() {
+    fun test_IsNewsShareNewsUrlActionInArticleDescriptionFragment() {
         if(networkUtils.isConnected()) {
             onView(withId(R.id.articlesRecyclerView))
                 .check(matches(isDisplayed()))
@@ -232,9 +231,9 @@ class ArticleDescriptionTest{
             onView(withId(R.id.shareNewsURL))
                 .perform(click())
         }else{
-            ViewMatchers.assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
+            assertThat(networkUtils.isConnected(), CoreMatchers.`is`(false))
             onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(ViewMatchers.withText(R.string.internet_error)))
+                .check(matches(withText(R.string.internet_error)))
         }
         sleep(SHORT_TIME_SLEEP)
     }

@@ -1,19 +1,30 @@
 package com.demo.dailynews.data.repository
 
+import com.demo.dailynews.BuildConfig
+import com.demo.dailynews.data.NETWORK_ERROR
+import com.demo.dailynews.data.Resource
 import com.demo.dailynews.data.model.NewsApiResult
 import com.demo.dailynews.data.retrofit.NewsApiService
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
 import javax.inject.Inject
 
-@ActivityRetainedScoped
-class NewsRepository @Inject constructor(private val newsApiService: NewsApiService) {
+class NewsRepository @Inject constructor(private val newsApiService: NewsApiService){
 
-    suspend fun getNews(apiKey:String) : Flow<NewsApiResult>{
+    suspend fun getNews() : Flow<Resource<NewsApiResult>>{
         return flow {
-            val result = newsApiService.getHeadlines(apiKey)
-            emit(result)
+            try {
+                val resultResponse = newsApiService.getHeadlines(BuildConfig.NEWS_KEY)
+                val result = if (resultResponse.isSuccessful) {
+                    Resource.Success(resultResponse.body() as NewsApiResult)
+                } else {
+                    Resource.DataError(errorCode = resultResponse.code())
+                }
+                emit(result)
+            } catch (e: IOException) {
+                emit(Resource.DataError(errorCode = NETWORK_ERROR))
+            }
         }
     }
 

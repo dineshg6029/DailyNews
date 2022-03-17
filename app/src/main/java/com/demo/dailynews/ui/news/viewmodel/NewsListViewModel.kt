@@ -1,12 +1,15 @@
 package com.demo.dailynews.ui.news.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.*
-import com.demo.dailynews.BuildConfig
-import com.demo.dailynews.R
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.demo.dailynews.common.wrapEspressoIdlingResource
-import com.demo.dailynews.data.model.Article
+import com.demo.dailynews.data.NO_INTERNET_CONNECTION
+import com.demo.dailynews.data.Resource
+import com.demo.dailynews.data.model.NewsApiResult
 import com.demo.dailynews.data.repository.NewsRepository
+import com.java.predictweather.data.retrofit.NetworkUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -16,31 +19,24 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
-    private val app: Application
-) : AndroidViewModel(app) {
+    private val networkUtils: NetworkUtils) : ViewModel() {
 
-    private val _articleList = MutableLiveData<List<Article>>()
+    private val _articleResourceResult = MutableLiveData<Resource<NewsApiResult>>()
 
-    val articleList: LiveData<List<Article>>
-        get() = _articleList
+    val articleResourceResult : LiveData<Resource<NewsApiResult>>
+        get() = _articleResourceResult
 
-    val loadingStatus = MutableLiveData<Boolean>()
-
-    val errorMessage = MutableLiveData<String>()
 
     fun getNewsArticles() {
         viewModelScope.launch(Dispatchers.IO) {
-            loadingStatus.postValue(true)
+            _articleResourceResult.postValue(Resource.Loading())
             wrapEspressoIdlingResource {
-                newsRepository.getNews(BuildConfig.NEWS_KEY).collect {
-                    it.let {
-                        if (it.status == app.getString(R.string.fetch_success_status)) {
-                            _articleList.postValue(it.articles)
-                        } else {
-                            errorMessage.postValue(app.getString(R.string.fetch_failed_message))
-                        }
-                        loadingStatus.postValue(false)
+                if(networkUtils.isConnected()){
+                    newsRepository.getNews().collect {
+                        _articleResourceResult.postValue(it)
                     }
+                }else{
+                    _articleResourceResult.postValue(Resource.DataError(NO_INTERNET_CONNECTION))
                 }
             }
         }

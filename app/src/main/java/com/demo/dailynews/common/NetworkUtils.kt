@@ -3,10 +3,10 @@ package com.java.predictweather.data.retrofit
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class NetworkUtils @Inject constructor(@ActivityContext private val mContext: Context){
+class NetworkUtils @Inject constructor(@ApplicationContext val mContext: Context){
 
     fun isConnected():Boolean{
         val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

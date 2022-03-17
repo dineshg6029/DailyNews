@@ -12,4 +12,13 @@
         <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="image_cardview_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/image_height</item>
+        <item name="android:layout_margin">@dimen/five_dp</item>
+        <item name="android:padding">@dimen/five_dp</item>
+        <item name="elevation">@dimen/five_dp</item>
+        <item name="cardCornerRadius">@dimen/ten_dp</item>
+    </style>
 </resources>

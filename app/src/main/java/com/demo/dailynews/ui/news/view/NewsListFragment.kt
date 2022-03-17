@@ -11,7 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.demo.dailynews.R
+import com.demo.dailynews.data.NO_INTERNET_CONNECTION
+import com.demo.dailynews.data.Resource
 import com.demo.dailynews.data.model.Article
+import com.demo.dailynews.data.model.NewsApiResult
 import com.demo.dailynews.databinding.NewsListFragmentBinding
 import com.demo.dailynews.ui.news.adapters.ArticlesListAdapter
 import com.demo.dailynews.ui.news.interfaces.CustomItemClickListener
@@ -25,8 +28,12 @@ import javax.inject.Inject
 class NewsListFragment : Fragment(), CustomItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel: NewsListViewModel by viewModels()
-    @Inject lateinit var articlesListAdapter: ArticlesListAdapter
-    @Inject lateinit var networkUtils: NetworkUtils
+
+    @Inject
+    lateinit var articlesListAdapter: ArticlesListAdapter
+
+    @Inject
+    lateinit var networkUtils: NetworkUtils
     private lateinit var dataBindingObject: NewsListFragmentBinding
     private var articles: MutableList<Article>? = null
 
@@ -48,8 +55,10 @@ class NewsListFragment : Fragment(), CustomItemClickListener, SwipeRefreshLayout
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.articleList.value == null) fetchData()
-        viewModel.articleList.value?.let {
+        if (viewModel.articleResourceResult.value == null)
+            fetchData()
+
+        viewModel.articleResourceResult.value?.data?.articles?.let {
             articlesListAdapter.update(it)
         }
     }
@@ -62,36 +71,43 @@ class NewsListFragment : Fragment(), CustomItemClickListener, SwipeRefreshLayout
     }
 
     private fun observeLiveData() {
-        viewModel.loadingStatus.observe(this, {
-            if (it) {
-                dataBindingObject.swipeRefreshLayout.isRefreshing = true
-                dataBindingObject.errorTextView.visibility = View.GONE
-                dataBindingObject.articlesRecyclerView.visibility = View.GONE
-            } else {
-                dataBindingObject.swipeRefreshLayout.isRefreshing = false
-            }
-        })
 
-        viewModel.errorMessage.observe(
-            this,
-            {
-                dataBindingObject.swipeRefreshLayout.isRefreshing = false
-                with(dataBindingObject.errorTextView){
-                    visibility = View.VISIBLE
-                    text = it
+        viewModel.articleResourceResult.observe(this,{
+            when(it){
+                is Resource.Loading<NewsApiResult> -> {
+                    dataBindingObject.swipeRefreshLayout.isRefreshing = true
+                    dataBindingObject.errorTextView.visibility = View.GONE
+                    dataBindingObject.articlesRecyclerView.visibility = View.GONE
                 }
-            },
-        )
-
-        viewModel.articleList.observe(this, {
-            dataBindingObject.swipeRefreshLayout.isRefreshing = false
-            if (!it.isNullOrEmpty()) {
-                dataBindingObject.articlesRecyclerView.visibility = View.VISIBLE
-                articles = it.toMutableList()
-                articlesListAdapter.update(it)
-            } else {
-                dataBindingObject.errorTextView.visibility = View.VISIBLE
-                dataBindingObject.errorTextView.text = getString(R.string.no_news_found)
+                is Resource.DataError<NewsApiResult> -> {
+                    dataBindingObject.swipeRefreshLayout.isRefreshing = false
+                    if (it.errorCode != NO_INTERNET_CONNECTION) {
+                        with(dataBindingObject.errorTextView) {
+                            visibility = View.VISIBLE
+                            text = getString(R.string.fetch_failed_message)
+                        }
+                    } else {
+                        Snackbar.make(
+                            dataBindingObject.swipeRefreshLayout,
+                            getString(R.string.internet_error),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                is Resource.Success<NewsApiResult> -> {
+                    dataBindingObject.swipeRefreshLayout.isRefreshing = false
+                    val newsApiResult = it.data
+                    newsApiResult?.let{ apiResult ->
+                        if (!apiResult.articles.isNullOrEmpty()) {
+                            dataBindingObject.articlesRecyclerView.visibility = View.VISIBLE
+                            articles = apiResult.articles.toMutableList()
+                            articlesListAdapter.update(articles!!)
+                        } else {
+                            dataBindingObject.errorTextView.visibility = View.VISIBLE
+                            dataBindingObject.errorTextView.text = getString(R.string.no_news_found)
+                        }
+                    }
+                }
             }
         })
     }
@@ -111,16 +127,7 @@ class NewsListFragment : Fragment(), CustomItemClickListener, SwipeRefreshLayout
     }
 
     private fun fetchData() {
-        if (networkUtils.isConnected()) {
-            viewModel.getNewsArticles()
-        } else {
-            Snackbar.make(
-                dataBindingObject.swipeRefreshLayout,
-                getString(R.string.internet_error),
-                Snackbar.LENGTH_LONG
-            ).show()
-            dataBindingObject.swipeRefreshLayout.isRefreshing = false
-        }
+        viewModel.getNewsArticles()
     }
 
 }

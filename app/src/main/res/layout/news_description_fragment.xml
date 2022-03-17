@@ -14,46 +14,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/news_description_root">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.news.view.ArticleDescription"
-            android:padding="@dimen/five_dp">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/five_dp"
+            tools:context=".ui.news.view.ArticleDescription">
 
             <TextView
                 android:id="@+id/title_textView"
+                style="@style/headline_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{currentArticle.newsHeadline}"
                 android:layout_margin="@dimen/five_dp"
-                style="@style/headline_style"
+                android:text="@{currentArticle.newsHeadline}"
                 android:textSize="@dimen/des_large_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/news_ImageView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="@dimen/five_dp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageCardview"
+                style="@style/image_cardview_style"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_textView"
-                loadImageUrl="@{currentArticle.newsImageUrl}"
-                tools:src="@tools:sample/avatars" />
+                app:layout_constraintTop_toBottomOf="@+id/title_textView">
+                <ImageView
+                    android:id="@+id/news_ImageView"
+                    loadImageUrl="@{currentArticle.newsImageUrl}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    tools:src="@tools:sample/avatars"
+                    android:contentDescription="@string/article"/>
+            </androidx.cardview.widget.CardView>
+
 
             <TextView
                 android:id="@+id/description_TextView"
+                style="@style/description_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{currentArticle.newsDescription}"
-                style="@style/description_style"
-                android:textSize="@dimen/des_medium_text_size"
                 android:layout_margin="@dimen/five_dp"
                 android:layout_marginTop="@dimen/ten_dp"
+                android:text="@{currentArticle.newsDescription}"
+                android:textSize="@dimen/des_medium_text_size"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/news_ImageView" />
+                app:layout_constraintTop_toBottomOf="@+id/imageCardview" />
 
             <TextView
                 android:id="@+id/date_TextView"
@@ -61,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/five_dp"
                 android:layout_marginTop="@dimen/five_dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@{UtilitiesKt.updateDateTime(currentArticle.newsDateTime)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
